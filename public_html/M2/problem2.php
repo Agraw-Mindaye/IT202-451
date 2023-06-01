@@ -6,9 +6,18 @@ $a4 = [10.01, -12.22, 0.23, 19.20, -5.13, 3.12];
 function getTotal($arr) {
     echo "<br>Processing Array:<br><pre>" . var_export($arr, true) . "</pre>";
     $total = 0.00;
-    //TODO do adding here
-    //TODO do rounding stuff here
+    
+    //use a for loop to iterate throught the array and add each value in order to get the total
+    for($x = 0; $x < count($arr); $x++)
+    {
+        $total += $arr[$x];
+    }
+
+    $total = number_format($total, '2'); //format the total to 2 decimal places
+
     echo "The total is " . var_export($total, true);
+
+    //Agraw Mindaye | am3525 | 05/31/2023
 }
 echo "Problem 2: Adding Floats<br>";
 ?>

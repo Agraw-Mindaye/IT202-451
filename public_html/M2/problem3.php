@@ -7,8 +7,21 @@ $a4 = ["-1", "2", "-3", "4", "-5", "5", "-6", "6", "-7", "7"];
 function bePositive($arr) {
     echo "<br>Processing Array:<br><pre>" . var_export($arr, true) . "</pre>";
     echo "<br>Positive output:<br>";
-    //TODO use echo to output all of the values as positive (even if they were originally positive) 
-    //hint: may want to use var_dump() to show final data types
+
+    for($x = 0; $x < count($arr); $x++)
+    {
+        if(is_string($arr[$x])) //check if value is a string since abs fucntion will convert to an int or float
+        {
+            $arr[$x] = strval(abs($arr[$x]));  //use absolute value function get the positive value and strval to change it back into a string
+        } else                  
+        {
+            $arr[$x] = abs($arr[$x]);  //for all other types (ints and floats), simply use absolute value function
+        }
+
+        echo $arr[$x] . " " . var_dump($arr[$x]) . "<br>";
+    }
+
+    //Agraw Mindaye | am3525 | 05/31/2023
 }
 echo "Problem 3: Be Positive<br>";
 ?>
