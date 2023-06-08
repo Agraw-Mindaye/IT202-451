@@ -14,12 +14,68 @@
                 //added this delay here as some solutions may require it to update properly (i.e., click code may complete before the navigation changes)
                 //TODO: add code for processing the current selection 
 
+                const navLinks = document.querySelectorAll("nav a");
+
+                for(let i = 0; i < navLinks.length; i++)
+                {
+                    navLinks[i].addEventListener("click", function(event) 
+                    {
+                        var linkText = event.target.innerText;
+                        updateCurrentPage(linkText);
+                    })
+                }
+
                 //Note: likely you'll want to call updateCurrentPage towards the end
             }, 100);
         }
+
+        getCurrentSelection();
+        
     </script>
     <style>
         /* TODO: make edits here */
+
+
+        nav {
+            background-color: #555;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+            padding: 0px 25px;
+        }
+        
+        nav a:hover {
+            color: hotpink;
+        }
+
+        nav a:active {
+            color: blue;
+        }
+
+        ul li {
+            list-style: none;
+        }
+
+        ul li::marker {
+            content: '✓';
+        }
+
+        h1, a{
+            text-transform: capitalize;
+        }
     </style>
     <!-- make the necessary edits above this line -->
 
