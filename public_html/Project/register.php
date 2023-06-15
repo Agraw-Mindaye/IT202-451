@@ -50,9 +50,16 @@ require(__DIR__ . "/../../partials/nav.php");
     }
     
     //sanitize
-    $email = filter_var($email, FILTER_SANITIZE_EMAIL);
+    //$email = filter_var($email, FILTER_SANITIZE_EMAIL);
+    $email = sanitize_email($email);
+
     //validate
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    /*if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "Invalid email address";
+        $hasError = true;
+    }*/
+
+    if (!is_valid_email($email)) {
         echo "Invalid email address";
         $hasError = true;
     }
