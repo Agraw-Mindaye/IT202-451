@@ -2,6 +2,7 @@
 require_once(__DIR__ . "/../../partials/nav.php");
 is_logged_in(true);
 ?>
+<h1>Profile</h1>
 <?php
 if (isset($_POST["save"])) {
     $email = se($_POST, "email", null, false);
@@ -103,7 +104,7 @@ $username = get_username();
         <input type="text" name="username" id="username" value="<?php se($username); ?>" />
     </div>
     <!-- DO NOT PRELOAD PASSWORD -->
-    <div>Password Reset</div>
+    <div class="pw-reset">Password Reset</div>
     <div class="mb-3">
         <label for="cp">Current Password</label>
         <input type="password" name="currentPassword" id="cp" />

@@ -27,7 +27,7 @@ require(__DIR__ . "/../../partials/nav.php");
                 isValid = false;
             }
         } else {
-            if (!isValidUsername(username)) {   //verify valid username
+            if (!isValidUsername(email)) {   //verify valid username
                 flash("Username must be lowercase, 3-16 characters, and contain only a-z, 0-9, _ or -", "danger");
                 isValid = false;
             }
