@@ -17,7 +17,28 @@ require(__DIR__ . "/../../partials/nav.php");
         //TODO 1: implement JavaScript validation
         //ensure it returns false for an error and true for success
 
-        return true;
+        let isValid = true
+        const email = form.email.value
+        const pw = form.password.value
+
+        if (email.indexOf("@") > -1) {  //check if email contains an "@"
+            if (!isValidEmail(email)) { //verify valid email
+                flash("Invalid email", "danger");
+                isValid = false;
+            }
+        } else {
+            if (!isValidUsername(username)) {   //verify valid username
+                flash("Username must be lowercase, 3-16 characters, and contain only a-z, 0-9, _ or -", "danger");
+                isValid = false;
+            }
+        }
+
+        if (!isValidPassword(pw)) {  //verify valid password
+            flash("Password too short", "danger");
+            isValid = false;
+        }
+
+        return isValid;        
     }
 </script>
 <?php
