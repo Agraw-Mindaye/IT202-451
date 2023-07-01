@@ -99,6 +99,26 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm
         flash("Passwords must match", "danger");
         $hasError = true;
     }
+
+    if (!$hasError) {
+        //TODO 4
+
+
+        $hash = password_hash($password, PASSWORD_BCRYPT);
+        $db = getDB();
+        $stmt = $db->prepare("INSERT INTO Users (email, password, username) VALUES(:email, :password, :username)");
+
+        try {
+            $stmt->execute([":email" => $email, ":password" => $hash, ":username" => $username]);
+            flash("Successfully registered!", "success");
+        } catch (Exception $e) {
+            users_check_duplicate($e->errorInfo);
+        }
+
+      
+    }
+
+    /*
     if (!$hasError) {
         //TODO 4
         $hash = password_hash($password, PASSWORD_BCRYPT);
@@ -110,7 +130,7 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm
         } catch (Exception $e) {
             users_check_duplicate($e->errorInfo);
         }
-    }
+    }*/
 }
 ?>
 <?php
