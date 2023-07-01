@@ -1,5 +1,5 @@
 <?php
-require(__DIR__ . "/../../partials/nav.php");
+require_once(__DIR__ . "/../../partials/nav.php");
 ?>
 <form onsubmit="return validate(this)" method="POST">
     <div>
@@ -50,7 +50,7 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
     //TODO 3
     $hasError = false;
     if (empty($email)) {
-        flash("Email must not be empty");
+        flash("Email must be provided");
         $hasError = true;
     }
     if (str_contains($email, "@")) {
@@ -68,7 +68,7 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
         }
     }
     if (empty($password)) {
-        flash("password must not be empty");
+        flash("Password must be provided");
         $hasError = true;
     }
     if (!is_valid_password($password)) {
@@ -122,4 +122,4 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
 }
 ?>
 <?php 
-require(__DIR__."/../../partials/flash.php");
+require_once(__DIR__ . "/../../partials/flash.php");

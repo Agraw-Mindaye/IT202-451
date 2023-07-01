@@ -1,6 +1,7 @@
 <?php
 require_once(__DIR__ . "/../../partials/nav.php");
 is_logged_in(true);
+$db = getDB();
 ?>
 <h1>Profile</h1>
 <?php
@@ -21,13 +22,12 @@ if (isset($_POST["save"])) {
     }
     if (!$hasError) {
         $params = [":email" => $email, ":username" => $username, ":id" => get_user_id()];
-        $db = getDB();
         $stmt = $db->prepare("UPDATE Users set email = :email, username = :username where id = :id");
         try {
             $stmt->execute($params);
-            flash("Profile saved", "success");
         } catch (Exception $e) {
             users_check_duplicate($e->errorInfo);
+            $hasError = true;
         }
         //select fresh data from table
         $stmt = $db->prepare("SELECT id, email, username from Users where id = :id LIMIT 1");
@@ -53,12 +53,12 @@ if (isset($_POST["save"])) {
     $new_password = se($_POST, "newPassword", null, false);
     $confirm_password = se($_POST, "confirmPassword", null, false);
     if (!empty($current_password) && !empty($new_password) && !empty($confirm_password)) {
-        $hasError = false;
+        $passError = false;
         if (!is_valid_password($new_password)) {
             flash("Password too short", "danger");
-            $hasError = true;
+            $passError = true;
         }
-        if (!$hasError) {
+        if (!$hasError && !$passError) {
             if ($new_password === $confirm_password) {
                 //TODO validate current
                 $stmt = $db->prepare("SELECT password from Users where id = :id");
@@ -74,9 +74,10 @@ if (isset($_POST["save"])) {
                                 ":password" => password_hash($new_password, PASSWORD_BCRYPT)
                             ]);
 
-                            flash("Password reset", "success");
+                            flash("Password has been reset and profile has saved", "success");
                         } else {
-                            flash("Current password is invalid", "warning");
+                            flash("Current password is invalid, password has not been changed", "warning");
+                            flash("Email and username have been saved");
                         }
                     }
                 } catch (Exception $e) {
@@ -133,8 +134,8 @@ $username = get_username();
         let isValid = true;
         const email = form.email.value
         const username = form.username.value
-        const pw = form.password.value
-        const con = form.confirm.value
+        const pw = form.newPassword.value
+        const con = form.confirmPassword.value
 
         if (email.indexOf("@") > -1) {  //check if email contains an "@"
             if (!isValidEmail(email)) { //verify valid email
