@@ -1,77 +1,93 @@
 <?php
 require_once(__DIR__ . "/../../partials/nav.php");
+
 is_logged_in(true);
 $db = getDB();
+
+$playerWins = 0;
+
+if(is_logged_in()) {
+
+    $user_id = get_user_id();
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+        $score_increase = $_POST['score_increase'];
+
+        $score_query = "SELECT score FROM Scores WHERE user_id = $user_id";
+        $result = $db->query($score_query);
+
+
+        if ($result && $result->rowCount() > 0) {
+            $row = $result->fetch(PDO::FETCH_ASSOC);
+            $current_score = $row['score'];
+            $new_score = $current_score + $score_increase;
+            $update_query = "UPDATE Scores SET score = $new_score WHERE user_id = $user_id";
+            $db->query($update_query);
+        } else {
+
+            $insert_query = "INSERT INTO Scores (user_id, score, created, modified) VALUES ($user_id, $score_increase, NOW(), NOW())";
+            $db->query($insert_query);
+        }
+
+    }
+
+    $get_score_query = "SELECT score FROM Scores WHERE user_id = $user_id";
+    $result = $db->query($get_score_query);
+    if ($result && $result->rowCount() > 0) {
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+        $playerWins = $row['score'];
+    }
+}
 ?>
 
 <h1>Rock Paper Scissors</h1>
-<div class="game-cointainer">
-    <button class='rock'>Rock</button>
-    <button class='paper'>Paper</button>
-    <button class='scissors'>Scissors</button>
+<div class="game-container">
+    <form method="post">
+        <button type="button" onclick="playGame('rock')">Rock</button>
+        <button type="button" onclick="playGame('paper')">Paper</button>
+        <button type="button" onclick="playGame('scissors')">Scissors</button>
+        <input type="hidden" id="score-increase-input" name="score_increase" value="0">
+    </form>
+    <div id="result"></div>
+    <div id="player-score">Wins: <?php echo $playerWins; ?></div>
 </div>
-<div class="result"></div>
+
 
 <script>
 
-const rockButton = document.querySelector('.rock')
-const paperButton = document.querySelector('.paper')
-const scissorsButton = document.querySelector('.scissors')
-const resultDiv = document.querySelector('.result')
+    function playGame(playerSelection)  {
 
-let playerWins = 0;
+        const choices = ['rock', 'paper', 'scissors']
+        const computerSelection = choices[Math.floor(Math.random() * choices.length)]
 
-function getComputerChoice() {
-    let choices = ['rock', 'paper', 'scissors']
-    return choices[Math.floor(Math.random() * choices.length)]
-}
+        let result
 
-function play(playerSelection, computerSelection)  {
+        if (playerSelection == 'rock' && computerSelection == 'scissors' 
+            || playerSelection == 'paper' && computerSelection == 'rock' 
+            || playerSelection == 'scissors' && computerSelection == 'paper')
+        {
+            result = `You win! ${playerSelection} beats ${computerSelection}`
+            updateScore(1)
+        }
+        else if (playerSelection == computerSelection)
+        {
+            result = `You tied! You both picked ${playerSelection}`
+        }   
+        else 
+        {
+            result = `You lost :( ${computerSelection} beats ${playerSelection}`
+        }
 
-    const p = document.createElement('p')
-
-    if (playerSelection == 'rock' && computerSelection == 'scissors' 
-        || playerSelection == 'paper' && computerSelection == 'rock' 
-        || playerSelection == 'scissors' && computerSelection == 'paper')
-    {
-        playerWins++
-        p.innerText = `You won! ${playerSelection} beats ${computerSelection}`
-        resultDiv.appendChild(p)
+        document.getElementById("result").innerText = result
     }
-    else if (playerSelection == 'rock' && computerSelection == 'paper' 
-        || playerSelection == 'scissors' && computerSelection == 'rock' 
-        || playerSelection == 'paper' && computerSelection == 'scissors')
-    {
-        p.innerText = `You lost :( ${computerSelection} beats ${playerSelection}`
-        resultDiv.appendChild(p)
-    }   
-    else if (playerSelection == computerSelection)
-    {
-        p.innerText = `You tied! You both picked ${playerSelection}`
-        resultDiv.appendChild(p)
+
+    function updateScore(scoreIncrease) {
+        const scoreIncreaseInput = document.getElementById("score-increase-input");
+        scoreIncreaseInput.value = scoreIncrease;
+       
+        document.querySelector("form").submit();
     }
-}
 
-
-rockButton.addEventListener('click', () => {
-    resultDiv.innerHTML = ""
-    const computerSelection = getComputerChoice()
-    const playerSelection = 'rock'
-    play(playerSelection, computerSelection)
-})
-
-paperButton.addEventListener('click', () => {
-    resultDiv.innerHTML = ""
-    const computerSelection = getComputerChoice()
-    const playerSelection = 'paper'
-    play(playerSelection, computerSelection)
-})
-
-scissorsButton.addEventListener('click', () => {
-    resultDiv.innerHTML = ""
-    const computerSelection = getComputerChoice()
-    const playerSelection = 'scissors'
-    play(playerSelection, computerSelection)
-})
 
 </script>
