@@ -12,12 +12,13 @@ if(is_logged_in()) {
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-        $score_increase = $_POST['score_increase'];
+        //update the score in the database if the form is submitted
+        $score_increase = $_POST['score_increase']; 
 
         $score_query = "SELECT score FROM Scores WHERE user_id = $user_id";
         $result = $db->query($score_query);
 
-
+        //update user score if they have an existing score
         if ($result && $result->rowCount() > 0) {
             $row = $result->fetch(PDO::FETCH_ASSOC);
             $current_score = $row['score'];
@@ -25,13 +26,14 @@ if(is_logged_in()) {
             $update_query = "UPDATE Scores SET score = $new_score WHERE user_id = $user_id";
             $db->query($update_query);
         } else {
-
+            //insert a new score if user does not have an existing score
             $insert_query = "INSERT INTO Scores (user_id, score, created, modified) VALUES ($user_id, $score_increase, NOW(), NOW())";
             $db->query($insert_query);
         }
 
     }
 
+    //get the user's score from the database
     $get_score_query = "SELECT score FROM Scores WHERE user_id = $user_id";
     $result = $db->query($get_score_query);
     if ($result && $result->rowCount() > 0) {
@@ -68,7 +70,7 @@ if(is_logged_in()) {
             || playerSelection == 'scissors' && computerSelection == 'paper')
         {
             result = `You win! ${playerSelection} beats ${computerSelection}`
-            updateScore(1)
+            updateScore(1) //increase user score by 1 point if they win
         }
         else if (playerSelection == computerSelection)
         {
@@ -82,12 +84,12 @@ if(is_logged_in()) {
         document.getElementById("result").innerText = result
     }
 
+    //update the user score using a form submit
     function updateScore(scoreIncrease) {
         const scoreIncreaseInput = document.getElementById("score-increase-input");
         scoreIncreaseInput.value = scoreIncrease;
        
         document.querySelector("form").submit();
     }
-
 
 </script>
