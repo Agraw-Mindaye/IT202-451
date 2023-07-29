@@ -20,6 +20,8 @@ if(is_logged_in()) {
         $db->query($insert_query);
 
         $playerWins = 0; //reset player score
+
+        // am3525 | 07/26
     
     }
 
@@ -80,6 +82,8 @@ if(is_logged_in()) {
 
                 document.querySelector("form").submit();
 
+                // am3525 | 07/26
+
             }
             wins = 0
         }
@@ -87,3 +91,6 @@ if(is_logged_in()) {
         document.getElementById("result").innerText = result
     }
 </script>
+<?php
+require_once(__DIR__ . "/../../partials/flash.php");
+?>
