@@ -134,3 +134,32 @@ th, td {
     padding: 10px;
 }
 
+/* Home Page */
+
+.scoreboard-container {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 10px;
+}
+
+.scoreboard-column {
+    flex: 1;
+    margin: 0 10px;
+}
+
+.scoreboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+}
+
+.game-details {
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+.game-link a, .game-link a:visited {
+    text-decoration: none;
+    color: #00B300;
+    font-size: 20px;
+}

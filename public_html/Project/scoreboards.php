@@ -1,77 +1,67 @@
 <?php
 
-function getTopDailyScores($time_limit = 10) {
+//am3525 | 08/01
+
+function getTopDailyScores($limit) {
     
     $user_id = get_user_id();
-
     $db = getDB();
 
-    $score_query = "SELECT username, score FROM Scores JOIn Users ON Scores.user_id = Users.id
-                    WHERE Scores.created >= CURRENT_DATE AND Scores.user_id = :user_id
-                    ORDER BY score DESC LIMIT :time_limit";
+    $score_query = "SELECT U.username, S.score, S.created FROM Scores S JOIN Users U ON S.user_id = U.id
+                    WHERE DATE(S.created) = CURDATE()
+                    ORDER BY S.score DESC LIMIT :limit";
     
     $stmt = $db->prepare($score_query);
-    $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
-    $stmt->bindValue(':time_limit', $time_limit, PDO::PARAM_INT);
+    $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
     $stmt->execute();
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 }
 
-function getTopWeeklyScores($time_limit = 10) {
+function getTopWeeklyScores($limit) {
     
     $user_id = get_user_id();
-
     $db = getDB();
 
-    $score_query = "SELECT username, score FROM Scores JOIN Users ON Scores.user_id = Users.id
-                    WHERE Scores.created >= DATE_SUB(NOW(), INTERVAL 7 DAY) AND Scores.user_id = :user_id
-                    ORDER BY score DESC LIMIT :time_limit";
+    $score_query = "SELECT U.username, S.score, S.created FROM Scores S JOIN Users U ON S.user_id = U.id
+                    WHERE YEARWEEK(S.created) = YEARWEEK(NOW())
+                    ORDER BY S.score DESC LIMIT :limit";
     
     $stmt = $db->prepare($score_query);
-    $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
-    $stmt->bindValue(':time_limit', $time_limit, PDO::PARAM_INT);
+    $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
     $stmt->execute();
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 }
 
-function getTopMonthlyScores($time_limit = 10) {
-
+function getTopMonthlyScores($limit) {
+    
     $user_id = get_user_id();
-
     $db = getDB();
 
-    $score_query = "SELECT username, score FROM Scores JOIN Users ON Scores.user_id = Users.id
-                    WHERE Scores.created >= DATE_SUB(NOW(), INTERVAL 1 MONTH) AND Scores.user_id = :user_id
-                    ORDER BY score DESC LIMIT :time_limit";
+    $score_query = "SELECT U.username, S.score, S.created FROM Scores S JOIN Users U ON S.user_id = U.id
+                    WHERE MONTH(S.created) = MONTH(NOW()) AND YEAR(S.created) = YEAR(NOW())
+                    ORDER BY S.score DESC LIMIT :limit";
     
     $stmt = $db->prepare($score_query);
-    $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
-    $stmt->bindValue(':time_limit', $time_limit, PDO::PARAM_INT);
+    $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
     $stmt->execute();
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 }
 
-function getTopScoresLifetime($time_limit = 10) {
+function getTopScoresLifetime($limit) {
 
     $user_id = get_user_id();
-
     $db = getDB();
 
-    $score_query = "SELECT username, score FROM Scores JOIN Users ON Scores.user_id = Users.id
-                    WHERE Scores.user_id = :user_id
-                    ORDER BY score DESC LIMIT :time_limit";
+    $score_query = "SELECT U.username, S.score, S.created FROM Scores S JOIN Users U ON S.user_id = U.id
+                    ORDER BY S.score DESC LIMIT :limit";
     
     $stmt = $db->prepare($score_query);
-    $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
-    $stmt->bindValue(':time_limit', $time_limit, PDO::PARAM_INT);
+    $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
     $stmt->execute();
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 }
+
