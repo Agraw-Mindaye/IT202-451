@@ -2,7 +2,14 @@
 require_once(__DIR__ . "/../../partials/nav.php");
 is_logged_in(true);
 $db = getDB();
+
+$user_id = get_user_id();
+
+$scores_query = "SELECT score, created FROM Scores WHERE user_id = $user_id ORDER BY created DESC LIMIT 10";
+$result = $db->query($scores_query);
+
 ?>
+
 <h1>Profile</h1>
 <?php
 if (isset($_POST["save"])) {
@@ -120,6 +127,17 @@ $username = get_username();
     </div>
     <input type="submit" value="Update Profile" name="save" />
 </form>
+
+
+<div class="scores-container">
+    <h2>Latest 10 Scores:</h2>
+    <ul class="scores-list">
+        <?php foreach ($result as $row) : ?>
+        <li> <?php echo "Score: " . $row['score'] . " | Recorded on: " . $row['created']; ?> </li>
+        <?php endforeach; ?>
+    </ul>
+</div>
+
 
 <script>
     function validate(form) {
