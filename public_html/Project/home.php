@@ -20,7 +20,7 @@ if (is_logged_in(true)) {
         The computer will randomly choose between those three options and the <br>
         winner will be decided based on your choice and the computer's.</p>
 
-        <h2>***Rules***</h2>
+        <h2>***Game Rules***</h2>
         <h4>Rock beats scissors</h4>
         <h4>Paper beats rock</h4>
         <h4>Scissors beats paper</h4>
