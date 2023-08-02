@@ -65,7 +65,7 @@ if (is_logged_in(true)) {
         <?php
         $weeklyScores = getTopWeeklyScores(10);
         if(empty($weeklyScores)) {
-            echo "No daily scores to display";
+            echo "No weekly scores to display";
         } else {
         ?>
             <table class="scoreboard-table">
@@ -93,8 +93,8 @@ if (is_logged_in(true)) {
         <h2>Top 10 Monthly Scores</h2>
         <?php
         $monthlyScores = getTopMonthlyScores(10);
-        if(empty($dailyScores)) {
-            echo "No daily scores to display";
+        if(empty($monthlyScores)) {
+            echo "No monthly scores to display";
         } else {
         ?>
             <table class="scoreboard-table">
@@ -121,7 +121,7 @@ if (is_logged_in(true)) {
         <?php
         $lifetimeScores = getTopScoresLifetime(10);
         if(empty($lifetimeScores)) {
-            echo "No daily scores to display";
+            echo "No lifetime scores to display";
         } else {
         ?>
             <table class="scoreboard-table">
